@@ -24,6 +24,7 @@ public class DataProjectConvert {
         dataProject.setId(req.getId());
         dataProject.setProjectId(req.getProjectId());
         dataProject.setProjectName(req.getProjectName());
+        dataProject.setProjectType(req.getProjectType());
         dataProject.setProjectDesc(req.getProjectDesc());
         dataProject.setCreatedOrganId(organInfo.getOrganId());
         dataProject.setCreatedOrganName(organInfo.getOrganName());
@@ -77,6 +78,7 @@ public class DataProjectConvert {
         dataProjectDetailsVo.setUserName(dataProject.getCreatedUsername());
         dataProjectDetailsVo.setStatus(dataProject.getStatus());
         dataProjectDetailsVo.setCreateDate(dataProject.getCreateDate());
+        dataProjectDetailsVo.setProjectType(dataProject.getProjectType());
         return dataProjectDetailsVo;
     }
 

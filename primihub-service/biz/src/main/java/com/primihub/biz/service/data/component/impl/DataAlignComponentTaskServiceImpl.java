@@ -199,7 +199,6 @@ public class DataAlignComponentTaskServiceImpl extends BaseComponentServiceImpl 
                 if (StringUtils.isBlank(multipleSelected)) {
                     return BaseResultEntity.failure(BaseResultEnum.DATA_RUN_TASK_FAIL,"数据对齐选择特征为空");
                 }
-//                fieldList = Arrays.stream(multipleSelected.split(",")).collect(Collectors.toList());
                 fieldList = JSONArray.parseArray(multipleSelected,String.class);
             }
             log.info("data-align clientDataFileHandleField: {}",JSONObject.toJSONString(clientData.getFileHandleField()));

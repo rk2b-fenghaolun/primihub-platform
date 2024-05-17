@@ -21,6 +21,10 @@ public class DataProjectReq{
      */
     private String projectName;
     /**
+     * 项目类型 多方安全计算（MPC），横向联邦 HFL 纵向联邦 VFL
+     */
+    private String projectType;
+    /**
      * 项目描述
      */
     private String projectDesc;

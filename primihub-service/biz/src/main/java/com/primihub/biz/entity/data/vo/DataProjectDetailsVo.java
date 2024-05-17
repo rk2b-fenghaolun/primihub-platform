@@ -26,6 +26,10 @@ public class DataProjectDetailsVo {
      */
     private String projectDesc;
     /**
+     * 项目类型 多方安全计算（MPC），横向联邦 HFL 纵向联邦 VFL
+     */
+    private String projectType;
+    /**
      * 是否创建者
      */
     private Boolean creator = false;

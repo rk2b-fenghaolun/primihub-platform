@@ -2,9 +2,7 @@ package com.primihub.biz.service.data;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.primihub.biz.config.base.BaseConfiguration;
-import com.primihub.biz.config.base.ComponentsConfiguration;
-import com.primihub.biz.config.base.OrganConfiguration;
+import com.primihub.biz.config.base.*;
 import com.primihub.biz.config.test.TestConfiguration;
 import com.primihub.biz.convert.DataModelConvert;
 import com.primihub.biz.convert.DataProjectConvert;
@@ -13,6 +11,7 @@ import com.primihub.biz.entity.base.BaseResultEntity;
 import com.primihub.biz.entity.base.BaseResultEnum;
 import com.primihub.biz.entity.base.PageDataEntity;
 import com.primihub.biz.entity.data.dataenum.ModelStateEnum;
+import com.primihub.biz.entity.data.dataenum.ProjectTypeEnum;
 import com.primihub.biz.entity.data.dataenum.TaskStateEnum;
 import com.primihub.biz.entity.data.dataenum.TaskTypeEnum;
 import com.primihub.biz.entity.data.po.*;
@@ -34,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +52,12 @@ public class DataModelService {
     private BaseConfiguration baseConfiguration;
     @Autowired
     private ComponentsConfiguration componentsConfiguration;
+    @Autowired
+    private MpcComponentsConfiguration mpcComponentsConfiguration;
+    @Autowired
+    private HFLComponentsConfiguration hflComponentsConfiguration;
+    @Autowired
+    private VFLComponentsConfiguration vflComponentsConfiguration;
     @Autowired
     private OrganConfiguration organConfiguration;
     @Autowired
@@ -144,7 +150,7 @@ public class DataModelService {
         }
         return BaseResultEntity.success(map);
     }
-    
+
     public BaseResultEntity getDataModelList(PageReq req, String projectName, String modelName, Integer taskStatus,Long projectId) {
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("pageSize",req.getPageSize());
@@ -188,8 +194,25 @@ public class DataModelService {
         return BaseResultEntity.success(new PageDataEntity(tolal,req.getPageSize(),req.getPageNo(),modelListVos));
     }
 
-    public BaseResultEntity getModelComponent() {
-        List<ModelComponent> modelComponents  = componentsConfiguration.getModelComponents().stream().filter(modelComponent -> modelComponent.getIsShow()==0).collect(Collectors.toList());
+    public BaseResultEntity getModelComponent(String projectType) {
+        List<ModelComponent> modelComponents;
+        if (StringUtils.isBlank(projectType)){
+            modelComponents  = componentsConfiguration.getModelComponents().stream().filter(modelComponent -> modelComponent.getIsShow()==0).collect(Collectors.toList());
+        } else {
+            switch(projectType){
+                case "MPC" :
+                    modelComponents = mpcComponentsConfiguration.getModelComponents().stream().filter(modelComponent -> modelComponent.getIsShow()==0).collect(Collectors.toList());
+                    break;
+                case "HFL" :
+                    modelComponents = hflComponentsConfiguration.getModelComponents().stream().filter(modelComponent -> modelComponent.getIsShow()==0).collect(Collectors.toList());
+                    break;
+                case "VFL" :
+                    modelComponents = vflComponentsConfiguration.getModelComponents().stream().filter(modelComponent -> modelComponent.getIsShow()==0).collect(Collectors.toList());
+                    break;
+                default :
+                    return BaseResultEntity.failure(BaseResultEnum.PARAM_INVALIDATION, "不支持当前类型");
+            }
+        }
         return BaseResultEntity.success(modelComponents);
     }
 
